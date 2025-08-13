@@ -19,7 +19,8 @@
   "kv_namespaces": [
     {
       "binding": "USER_INFO",
-      "id": "c58ddb1c650b4232897f563866f881f2"
+      "id": "c58ddb1c650b4232897f563866f881f2",
+	  "preview_id": "15471c221dda41ff8c1b8adfc8fe8174"
     }
   ]
 	/**

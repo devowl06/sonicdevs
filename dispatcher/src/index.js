@@ -47,14 +47,16 @@ export default {
 
 		const features = config.features || [];
 		const apiKey = config.apiKey;
-
+		const exitUrl = config.exitUrl;
 
 		// Validate API key or any auth here if needed
 		console.log(`Features for hostname: ${features}`);
+		console.log(`Exit URL: ${exitUrl}`);
 
-		const headers = new Headers(request.headers);
-		headers.set('X-API-Key', apiKey);
-		const modifiedRequest = new Request(request, { headers });
+		const headersForFeatures = new Headers(request.headers);
+		headersForFeatures.set('X-API-Key', apiKey);
+		
+		const modifiedRequest = new Request(request, { headers: headersForFeatures });
 
 		// Create an array of fetch promises to all feature workers
 		const fetchPromises = features.map(async (feature) => {
@@ -78,7 +80,16 @@ export default {
 		// Wait for all feature worker responses
 		ctx.waitUntil(Promise.all(fetchPromises));
 
-		const forwardedRequest = new Request(url.href, request);
-		return fetch(forwardedRequest);
+		const backendUrl = `${exitUrl}${url.pathname}${url.search}`;
+		const headersForBackend = new Headers(request.headers);
+		
+		const backendRequest = new Request(backendUrl, {
+			method: request.method,
+			headers: headersForBackend,
+			body: request.body,
+			redirect: 'manual',
+		  });
+	  
+		  return fetch(backendRequest);
 	},
 };
