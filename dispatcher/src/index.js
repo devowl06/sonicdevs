@@ -6,7 +6,7 @@
  * - Run `npm run deploy` to publish your worker
  *
  * Learn more at https://developers.cloudflare.com/workers/
- */
+
 
 export default {
 	async fetch(req, env) {
@@ -17,8 +17,68 @@ export default {
 	  const response2 = await worker2.fetch(req);
 
 	  return new Response(JSON.stringify({
-		response1,
-		response2
-	  }));
+		response1: await response1.text(),
+		response2: await response2.text()
+	  }), {
+		headers: { "content-type": "application/json" }
+	  });
 	},
-  };
+  }; */
+
+  export default {
+	async fetch(request, env, ctx) {
+		const url = new URL(request.url);
+		const hostname = url.hostname;
+		console.log(url.href)
+		console.log(`Incoming request for hostname: ${hostname}`);
+
+		console.log(request.headers)
+
+		// Get config from KV
+		const configString = await env.USER_INFO.get(hostname);
+		console.log(`Config string from KV: ${configString}`);
+		if (!configString) {
+			console.log("Hostname not found in Router KV");
+			return new Response("Hostname not found in Router KV", { status: 404 });
+		}
+
+		const config = JSON.parse(configString);
+		console.log(`Parsed config:`, config);
+
+		const features = config.features || [];
+		const apiKey = config.apiKey;
+
+
+		// Validate API key or any auth here if needed
+		console.log(`Features for hostname: ${features}`);
+
+		const headers = new Headers(request.headers);
+		headers.set('X-API-Key', apiKey);
+		const modifiedRequest = new Request(request, { headers });
+
+		// Create an array of fetch promises to all feature workers
+		const fetchPromises = features.map(async (feature) => {
+			const worker = env.DISPATCHER.get(feature);
+			if (!worker) {
+				console.log(`No worker binding found for feature ${feature}`);
+				return `[${feature}] No binding found`;
+			}
+			try {
+				console.log(`Forwarding request to ${feature}`);
+
+				const response = await worker.fetch(modifiedRequest);
+				console.log(`Response from ${feature}:`, response);
+				return response;
+			} catch (e) {
+				console.log(`Error fetching from ${feature}: ${e.message}`);
+				return `[${feature}] error: ${e.message}`;
+			}
+		});
+
+		// Wait for all feature worker responses
+		ctx.waitUntil(Promise.all(fetchPromises));
+
+		const forwardedRequest = new Request(url.href, request);
+		return fetch(forwardedRequest);
+	},
+};

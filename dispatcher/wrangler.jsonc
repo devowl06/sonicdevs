@@ -15,6 +15,12 @@
       "binding": "DISPATCHER",
       "namespace": "testing-sonic"
     }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "USER_INFO",
+      "id": "c58ddb1c650b4232897f563866f881f2"
+    }
   ]
 	/**
 	 * Smart Placement
