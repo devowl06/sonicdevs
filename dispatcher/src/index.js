@@ -89,7 +89,7 @@ export default {
 			body: request.body,
 			redirect: 'manual',
 		  });
-	  
-		  return fetch(backendRequest);
+  
+		return fetch(backendRequest);
 	},
 };

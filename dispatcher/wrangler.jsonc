@@ -25,9 +25,17 @@
   ],
   "routes": [
     {
-      "pattern": "api.devowl.in/*",
-      "zone_name": "devowl.in"
-    }
+    	"pattern": "worker-origin.devowl.in/*",
+      	"zone_name": "devowl.in"
+    },
+	{
+		"pattern": "api.theesaeedahmed.com/*",
+		"zone_name": "devowl.in"
+	},
+	{
+		"pattern": "test.fintapp.in/*",
+		"zone_name": "devowl.in"
+	}
   ]
 	/**
 	 * Smart Placement
