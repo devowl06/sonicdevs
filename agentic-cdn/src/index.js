@@ -10,6 +10,10 @@
 
 export default {
 	async fetch(request, env, ctx) {
+		const url = new URL(request.url);
+		const hostname = url.hostname;
+
+		console.log('Agentic CDN - Incoming request for hostname:', hostname);
 		return new Response('Hello World!');
 	},
 };
