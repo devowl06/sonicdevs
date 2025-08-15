@@ -35,6 +35,10 @@
 	{
 		"pattern": "test.fintapp.in/*",
 		"zone_name": "devowl.in"
+	},
+	{
+		"pattern": "render.fintapp.in/*",
+		"zone_name": "devowl.in"
 	}
   ]
 	// "services": [{ "binding": "MY_SERVICE", "service": "my-service" }]
