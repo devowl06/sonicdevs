@@ -38,8 +38,8 @@ export default {
 		const configString = await env.USER_INFO.get(hostname);
 		console.log(`Config string from KV: ${configString}`);
 		if (!configString) {
-			console.log("Hostname not found in Router KV");
-			return new Response("Hostname not found in Router KV", { status: 404 });
+			console.log("Hostname not found in USER INFO KV");
+			return new Response("Hostname not found in USER INFO KV", { status: 404 });
 		}
 
 		const config = JSON.parse(configString);

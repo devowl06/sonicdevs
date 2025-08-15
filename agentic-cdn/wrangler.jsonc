@@ -9,7 +9,14 @@
 	"compatibility_date": "2025-08-13",
 	"observability": {
 		"enabled": true
-	}
+	},
+	"kv_namespaces": [
+		{ // structure: hostname: {isAgenticCdnEnabled: boolean, rules: {exclude: string[], include: string[], ...}}
+			"binding": "agentic_cdn_config",
+			"id": "db00aa717d4241f29b0ba21cfd7b863a",
+			"preview_id": "45458019f18c40bd83711699051a09f2"
+		}
+	],
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
