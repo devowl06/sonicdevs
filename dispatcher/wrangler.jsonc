@@ -29,6 +29,10 @@
       	"zone_name": "devowl.in"
     },
 	{
+    	"pattern": "platform.devowl.in/*",
+      	"zone_name": "devowl.in"
+    },
+	{
 		"pattern": "api.theesaeedahmed.com/*",
 		"zone_name": "devowl.in"
 	},
